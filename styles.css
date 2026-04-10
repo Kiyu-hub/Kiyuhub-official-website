@@ -159,21 +159,46 @@ body {
 /* kiyu-logo */
 
 .nav-logo {
-    height: 68px;  /*Set this to the desired height of your logo area */
+    height: 68px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    transition: all 0.3s ease;
 }
 
 .kiyu-logo {
     height: 100%;        
-    width: 100%;         
+    width: auto;         
+    max-width: 200px;
     object-fit: contain; 
-     display: block;       
+    display: block;
+    transition: all 0.3s ease;
 }
 
 /* Logo hover effect for better interactivity */
 .nav-logo:hover .kiyu-logo {
-    transform: scale(1.1);
+    transform: scale(1.05);
+}
+
+/* Responsive logo sizing */
+@media (max-width: 768px) {
+    .nav-logo {
+        height: 50px;
+    }
+    
+    .kiyu-logo {
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-logo {
+        height: 40px;
+    }
+    
+    .kiyu-logo {
+        max-width: 120px;
+    }
 }
 
 
@@ -612,7 +637,7 @@ body {
 .member-bio {
     color: var(--text-light);
     line-height: 1.6;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
 }
 
 .member-social {
@@ -638,6 +663,130 @@ body {
     color: white;
 }
 
+/* Current Projects Section */
+.current-projects {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
+}
+
+.current-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.current-project-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.current-project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.project-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 10;
+}
+
+.project-image-placeholder {
+    height: 220px;
+    background: var(--gradient-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.project-image-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.project-image {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    object-position: center;
+    border-bottom: 1px solid var(--border-color);
+    display: block;
+    background: #f9fafb;
+    padding: 1rem 0;
+}
+
+.project-info {
+    padding: 1.5rem;
+}
+
+.project-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-dark);
+}
+
+.project-description {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.project-client {
+    color: #6B7280;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.btn-hidden {
+    display: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.project-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    display: inline-block;
+    background: #E0F8F0;
+    color: var(--primary-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.btn-small {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
 /* Portfolio Section */
 .portfolio {
     padding: 80px 0;
@@ -647,6 +796,36 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
+}
+
+.portfolio-grid + .portfolio-grid {
+    margin-top: 2rem;
+}
+
+.portfolio-grid-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.portfolio-grid-bottom {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1100px) {
+    .hero-container,
+    .about-content,
+    .contact-content {
+        gap: 3rem;
+    }
+
+    .services-grid,
+    .team-grid,
+    .testimonials-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .portfolio-grid-bottom {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 .portfolio-item {
@@ -677,6 +856,14 @@ body {
     margin-bottom: 1rem;
 }
 
+.portfolio-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-color);
+    display: block;
+}
+
 .portfolio-info {
     padding: 1.5rem;
 }
@@ -694,9 +881,10 @@ body {
 }
 
 .portfolio-client {
-    color: var(--primary-color);
+    color: #6B7280;
     font-weight: 600;
     font-size: 0.9rem;
+    margin-bottom: 1rem;
 }
 
 /* Testimonials Section */
@@ -941,17 +1129,27 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .container,
+    .nav-container,
+    .hero-container {
+        padding: 0 16px;
+    }
+
+    .navbar {
+        padding: 0.75rem 0;
+    }
+
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 70px;
+        top: 64px;
         flex-direction: column;
         background-color: white;
         width: 100%;
         text-align: center;
         transition: 0.3s;
         box-shadow: var(--shadow-md);
-        padding: 2rem 0;
+        padding: 1.5rem 0;
     }
 
     .nav-menu.active {
@@ -978,6 +1176,22 @@ body {
         transform: translateY(-8px) rotate(-45deg);
     }
 
+    .hero,
+    .about,
+    .services,
+    .team,
+    .portfolio,
+    .testimonials,
+    .contact,
+    .current-projects {
+        padding: 64px 0;
+    }
+
+    .hero {
+        min-height: auto;
+        padding-top: 104px;
+    }
+
     .hero-container {
         grid-template-columns: 1fr;
         text-align: center;
@@ -985,22 +1199,60 @@ body {
     }
 
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.3rem;
+        line-height: 1.15;
+        margin-bottom: 1rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
     }
 
     .hero-buttons {
         flex-direction: column;
         align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-buttons .btn {
+        width: min(100%, 260px);
     }
 
     .hero-stats {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    .stat-item {
+        background: white;
+        padding: 1rem 0.75rem;
+        border-radius: 14px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .stat-number {
+        font-size: 1.85rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    .hero-graphic {
+        width: min(78vw, 300px);
+        height: min(78vw, 300px);
     }
 
     .about-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+
+    .section-header {
+        margin-bottom: 2.5rem;
     }
 
     .values-grid {
@@ -1015,7 +1267,9 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .portfolio-grid {
+    .portfolio-grid,
+    .portfolio-grid-top,
+    .portfolio-grid-bottom {
         grid-template-columns: 1fr;
     }
 
@@ -1033,32 +1287,248 @@ body {
         text-align: center;
     }
 
+    .footer {
+        display: none;
+    }
+
     .section-title {
         font-size: 2rem;
+    }
+
+    .section-subtitle {
+        font-size: 1rem;
+    }
+
+    .mission,
+    .vision,
+    .value-item,
+    .service-card,
+    .testimonial-card,
+    .contact-form,
+    .member-info,
+    .portfolio-info,
+    .project-info {
+        padding: 1.25rem;
+    }
+
+    .value-item,
+    .service-card,
+    .team-member,
+    .portfolio-item,
+    .testimonial-card,
+    .contact-form {
+        width: 100%;
+        max-width: 520px;
+        margin-inline: auto;
+    }
+
+    .values-grid,
+    .services-grid,
+    .team-grid,
+    .portfolio-grid,
+    .portfolio-grid-top,
+    .portfolio-grid-bottom,
+    .testimonials-grid {
+        gap: 1.25rem;
+    }
+
+    .service-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        margin-bottom: 1rem;
+    }
+
+    .service-icon i {
+        font-size: 1.6rem;
+    }
+
+    .service-card h3,
+    .portfolio-info h3,
+    .project-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .service-card p,
+    .member-bio,
+    .portfolio-info p,
+    .project-description,
+    .testimonial-content p {
+        font-size: 0.95rem;
+    }
+
+    .service-features {
+        margin-bottom: 0;
+    }
+
+    .member-image-placeholder {
+        height: 220px;
+    }
+
+    .portfolio-grid + .portfolio-grid {
+        margin-top: 1.25rem;
+    }
+
+    .portfolio-image,
+    .project-image {
+        height: 180px;
+        object-fit: contain;
+        object-position: center;
+        background: var(--background-light);
+        padding: 0.75rem;
+    }
+
+    .portfolio-info .btn,
+    .project-info .btn,
+    .contact-form .btn {
+        width: 100%;
+    }
+
+    .contact-item {
+        align-items: flex-start;
+        gap: 0.85rem;
+    }
+
+    .contact-item i {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .contact-item p,
+    .footer-section p {
+        overflow-wrap: anywhere;
+    }
+
+    .social-icons {
+        flex-wrap: wrap;
     }
 }
 
 @media (max-width: 480px) {
+    .container,
+    .nav-container,
+    .hero-container {
+        padding: 0 14px;
+    }
+
+    .hero,
+    .about,
+    .services,
+    .team,
+    .portfolio,
+    .testimonials,
+    .contact,
+    .current-projects {
+        padding: 52px 0;
+    }
+
+    .hero {
+        padding-top: 96px;
+    }
+
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.9rem;
     }
 
     .hero-description {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .section-title {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.95rem;
     }
 
     .btn {
-        padding: 10px 20px;
+        padding: 10px 16px;
         font-size: 0.9rem;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-graphic {
+        width: min(82vw, 240px);
+        height: min(82vw, 240px);
+    }
+
+    .graphic-element:nth-child(1) {
+        width: 120px;
+        height: 120px;
+    }
+
+    .graphic-element:nth-child(2) {
+        width: 92px;
+        height: 92px;
+        bottom: 34px;
+    }
+
+    .graphic-element:nth-child(3) {
+        width: 66px;
+        height: 66px;
+        left: 32px;
+    }
+
+    .mission,
+    .vision,
+    .value-item,
+    .service-card,
+    .testimonial-card,
+    .contact-form,
+    .member-info,
+    .portfolio-info,
+    .project-info {
+        padding: 1rem;
+    }
+
+    .service-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+    }
+
+    .service-icon i {
+        font-size: 1.4rem;
+    }
+
+    .member-image-placeholder {
+        height: 200px;
+    }
+
+    .portfolio-grid + .portfolio-grid {
+        margin-top: 1rem;
+    }
+
+    .portfolio-image,
+    .project-image {
+        height: 150px;
+        padding: 0.5rem;
+    }
+
+    .contact-item {
+        gap: 0.75rem;
+    }
+
+    .contact-item i {
+        width: 40px;
+        height: 40px;
     }
 
     .services-grid,
     .team-grid,
     .portfolio-grid,
+    .portfolio-grid-top,
+    .portfolio-grid-bottom,
     .testimonials-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
