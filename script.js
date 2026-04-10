@@ -84,18 +84,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Animated counters
     function animateCounters() {
         const counters = document.querySelectorAll('.stat-number');
-        
+
         counters.forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-target'));
-            const count = parseInt(counter.innerText);
-            const increment = target / 100;
-            
-            if (count < target) {
-                counter.innerText = Math.ceil(count + increment);
-                setTimeout(() => animateCounters(), 50);
-            } else {
-                counter.innerText = target;
+            if (counter.dataset.animated === 'true') {
+                return;
             }
+
+            const targetText = counter.getAttribute('data-target') || '0';
+            const target = parseInt(targetText.replace(/[^0-9]/g, ''), 10) || 0;
+            const suffix = targetText.replace(/[0-9]/g, '');
+            const duration = 1500;
+            const start = performance.now();
+
+            counter.dataset.animated = 'true';
+
+            function updateCounter(timestamp) {
+                const progress = Math.min((timestamp - start) / duration, 1);
+                const currentValue = Math.floor(progress * target);
+                counter.textContent = `${currentValue}${suffix}`;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                    return;
+                }
+
+                counter.textContent = `${target}${suffix}`;
+            }
+
+            requestAnimationFrame(updateCounter);
         });
     }
 
@@ -108,23 +124,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('is-visible');
                 
                 // Animate counters when hero section is visible
-                if (entry.target.classList.contains('hero-stats')) {
+                if (entry.target.classList.contains('hero-stats') && entry.target.dataset.counted !== 'true') {
+                    entry.target.dataset.counted = 'true';
                     animateCounters();
+                }
+
+                if (!entry.target.classList.contains('hero-stats')) {
+                    observer.unobserve(entry.target);
                 }
             }
         });
     }, observerOptions);
 
     // Observe elements for animation
-    const animateElements = document.querySelectorAll('.service-card, .team-member, .portfolio-item, .testimonial-card, .value-item');
-    animateElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'all 0.6s ease';
+    const animateElements = document.querySelectorAll('.service-card, .team-member, .portfolio-item, .testimonial-card, .value-item, .current-project-card');
+    animateElements.forEach((el, index) => {
+        el.classList.add('reveal-on-scroll');
+        el.style.setProperty('--reveal-delay', `${Math.min(index * 90, 360)}ms`);
         observer.observe(el);
     });
 
@@ -326,18 +345,78 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add typing effect to hero title
-    function typeWriter(element, text, speed = 100) {
-        let i = 0;
-        element.innerHTML = '';
-        
-        function type() {
-            if (i < text.length) {
-                element.innerHTML += text.charAt(i);
-                i++;
-                setTimeout(type, speed);
+    function typeWriter(element, speed = 100) {
+        const segments = Array.from(element.childNodes).map(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                return {
+                    type: 'text',
+                    content: node.textContent || ''
+                };
             }
+
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                return {
+                    type: 'element',
+                    tag: node.tagName.toLowerCase(),
+                    className: node.className,
+                    content: node.textContent || ''
+                };
+            }
+
+            return null;
+        }).filter(Boolean);
+
+        if (!segments.length) {
+            return;
         }
-        
+
+        element.innerHTML = '';
+
+        let segmentIndex = 0;
+        let characterIndex = 0;
+        let activeNode = null;
+
+        function type() {
+            const segment = segments[segmentIndex];
+
+            if (!segment) {
+                return;
+            }
+
+            if (!activeNode) {
+                if (segment.type === 'text') {
+                    activeNode = document.createTextNode('');
+                    element.appendChild(activeNode);
+                } else {
+                    activeNode = document.createElement(segment.tag);
+                    if (segment.className) {
+                        activeNode.className = segment.className;
+                    }
+                    element.appendChild(activeNode);
+                }
+            }
+
+            const nextCharacter = segment.content.charAt(characterIndex);
+
+            if (segment.type === 'text') {
+                activeNode.textContent += nextCharacter;
+            } else {
+                activeNode.textContent += nextCharacter;
+            }
+
+            characterIndex += 1;
+
+            if (characterIndex < segment.content.length) {
+                setTimeout(type, speed);
+                return;
+            }
+
+            segmentIndex += 1;
+            characterIndex = 0;
+            activeNode = null;
+            setTimeout(type, speed);
+        }
+
         type();
     }
 
@@ -345,8 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const heroTitle = document.querySelector('.hero-title');
         if (heroTitle) {
-            const originalText = heroTitle.textContent;
-            typeWriter(heroTitle, originalText, 50);
+            typeWriter(heroTitle, 50);
         }
     }, 1500);
 
